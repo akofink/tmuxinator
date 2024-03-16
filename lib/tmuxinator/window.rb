@@ -55,7 +55,7 @@ module Tmuxinator
                             [pane_yml.values.first, pane_yml.keys.first]
                           when Array
                             [pane_yml, nil]
-                          else
+                          else # rubocop:todo Lint/DuplicateBranch
                             [pane_yml, nil]
                           end
 

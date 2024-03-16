@@ -3,7 +3,7 @@ module Tmuxinator
     def render
       Tmuxinator::Project.render_template(
         Tmuxinator::Config.wemux_template,
-        binding
+        binding,
       )
     end
 

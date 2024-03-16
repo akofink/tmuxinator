@@ -10,7 +10,7 @@ describe Tmuxinator::Window do
       window_name => {
         "pre" => [
           "echo 'I get run in each pane.  Before each pane command!'",
-          nil
+          nil,
         ],
         "synchronize" => synchronize,
         "layout" => "main-vertical",
@@ -25,7 +25,7 @@ describe Tmuxinator::Window do
         "root?" => true,
         "pre" => [
           "echo 'I get run in each pane.  Before each pane command!'",
-          nil
+          nil,
         ],
         "layout" => "main-vertical",
         "panes" => panes
@@ -48,7 +48,7 @@ describe Tmuxinator::Window do
         tmux: "tmux",
         root: root,
         root?: root?,
-        base_index: 1
+        base_index: 1,
       )
     end
 
@@ -62,7 +62,7 @@ describe Tmuxinator::Window do
       base_index: 1,
       pane_base_index: 0,
       root: "/project/tmuxinator",
-      root?: true
+      root?: true,
     )
   end
 
@@ -97,15 +97,15 @@ describe Tmuxinator::Window do
 
       it "returns three panes" do
         expect(window.panes).to all be_a_pane.with(
-          project: project, tab: window
+          project: project, tab: window,
         )
 
         expect(window.panes).to match(
           [
             a_pane.with(index: 0).and_commands("vim"),
             a_pane.with(index: 1).and_commands("ls"),
-            a_pane.with(index: 2).and_commands("top")
-          ]
+            a_pane.with(index: 2).and_commands("top"),
+          ],
         )
       end
     end
@@ -132,7 +132,7 @@ describe Tmuxinator::Window do
         [
           { "editor" => ["vim"] },
           { "run" => ["cmd1", "cmd2"] },
-          "top"
+          "top",
         ]
       end
 
@@ -141,8 +141,8 @@ describe Tmuxinator::Window do
           [
             a_pane.with(index: 0, title: "editor").and_commands("vim"),
             a_pane.with(index: 1, title: "run").and_commands("cmd1", "cmd2"),
-            a_pane.with(index: 2, title: nil).and_commands("top")
-          ]
+            a_pane.with(index: 2, title: nil).and_commands("top"),
+          ],
         )
       end
     end
@@ -159,7 +159,7 @@ describe Tmuxinator::Window do
         it "returns two panes in an Array" do
           expect(window.panes).to match [
             a_pane.with(index: 0).and_commands("vim"),
-            a_pane.with(index: 1).and_commands(command1, command2)
+            a_pane.with(index: 1).and_commands(command1, command2),
           ]
         end
       end
@@ -170,7 +170,7 @@ describe Tmuxinator::Window do
         it "returns two panes in an Array" do
           expect(window.panes).to match [
             a_pane.with(index: 0).and_commands("vim"),
-            a_pane.with(index: 1).and_commands(command1, command2)
+            a_pane.with(index: 1).and_commands(command1, command2),
           ]
         end
       end
@@ -208,7 +208,7 @@ describe Tmuxinator::Window do
       it "returns the flattened command" do
         expect(window.commands).to eq [
           "tmux send-keys -t test:1 git\\ fetch C-m",
-          "tmux send-keys -t test:1 git\\ status C-m"
+          "tmux send-keys -t test:1 git\\ status C-m",
         ]
       end
     end

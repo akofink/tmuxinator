@@ -95,11 +95,11 @@ describe Tmuxinator::Project do
     context "active sessions" do
       before do
         cmd = "#{project.tmux} ls 2> /dev/null"
-        resp = ""\
-          "foo: 1 window (created Sun May 25 10:12:00 1986) [0x0] (detached)\n"\
-          "bar: 1 window (created Sat Sept 01 00:00:00 1990) [0x0] (detached)"
+        resp = "foo: 1 window (created Sun May 25 10:12:00 1986) " \
+               "[0x0] (detached)\n" \
+               "bar: 1 window (created Sat Sept 01 00:00:00 1990) " \
+               "[0x0] (detached)"
         call_tmux_ls = receive(:`).with(cmd).at_least(:once).and_return(resp)
-
         expect(project).to call_tmux_ls
       end
 
@@ -194,7 +194,7 @@ describe Tmuxinator::Project do
         rendered = project_with_literals_as_window_name
         expect(rendered.windows.map(&:name)).to match_array(
           %w(222 222333 111222333444555666777 222.3 4e5 4E5
-             true false nil // /sample/)
+             true false nil // /sample/),
         )
       end
     end
@@ -215,7 +215,7 @@ describe Tmuxinator::Project do
       before do
         project.yaml["pre_window"] = [
           "mysql.server start",
-          "memcached -d"
+          "memcached -d",
         ]
       end
 
@@ -484,7 +484,7 @@ describe Tmuxinator::Project do
     it "splits commands into an array" do
       commands = [
         "tmux -f ~/.tmux.mac.conf -L foo send-keys -t sample:1 git\\ pull C-m",
-        "tmux -f ~/.tmux.mac.conf -L foo send-keys -t sample:1 git\\ merge C-m"
+        "tmux -f ~/.tmux.mac.conf -L foo send-keys -t sample:1 git\\ merge C-m",
       ]
       expect(window.commands).to eq(commands)
     end
@@ -505,7 +505,7 @@ describe Tmuxinator::Project do
       before do
         project.yaml["pre"] = [
           "mysql.server start",
-          "memcached -d"
+          "memcached -d",
         ]
       end
 
@@ -589,7 +589,7 @@ describe Tmuxinator::Project do
   end
 
   describe "::load" do
-    let(:path) { File.expand_path("../../../fixtures/sample.yml", __FILE__) }
+    let(:path) { File.expand_path("../../fixtures/sample.yml", __dir__) }
     let(:options) { {} }
 
     it "should raise if the project file doesn't parse" do
@@ -662,7 +662,7 @@ describe Tmuxinator::Project do
 
       it "configures a default position of top" do
         expect(project.tmux_set_pane_title_position).to eq(
-          "tmux set pane-border-status top"
+          "tmux set pane-border-status top",
         )
       end
     end
@@ -672,7 +672,7 @@ describe Tmuxinator::Project do
 
       it "configures a position of bottom" do
         expect(project.tmux_set_pane_title_position).to eq(
-          "tmux set pane-border-status bottom"
+          "tmux set pane-border-status bottom",
         )
       end
     end
@@ -682,7 +682,7 @@ describe Tmuxinator::Project do
 
       it "configures the default position" do
         expect(project.tmux_set_pane_title_position).to eq(
-          "tmux set pane-border-status top"
+          "tmux set pane-border-status top",
         )
       end
     end
@@ -692,7 +692,7 @@ describe Tmuxinator::Project do
 
       it "configures a default format" do
         expect(project.tmux_set_pane_title_format).to eq(
-          'tmux set pane-border-format "#{pane_index}: #{pane_title}"'
+          'tmux set pane-border-format "#{pane_index}: #{pane_title}"',
         )
       end
     end
@@ -702,7 +702,7 @@ describe Tmuxinator::Project do
 
       it "configures the provided format" do
         expect(project.tmux_set_pane_title_format).to eq(
-          'tmux set pane-border-format " [ #T ] "'
+          'tmux set pane-border-format " [ #T ] "',
         )
       end
     end

@@ -1,6 +1,6 @@
 # coding: utf-8
 
-lib = File.expand_path("../lib", __FILE__)
+lib = File.expand_path("lib", __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "tmuxinator/version"
 
@@ -16,7 +16,6 @@ Gem::Specification.new do |s|
 
   s.files         = Dir["lib/**/*", "spec/**/*", "bin/*", "completion/*"]
   s.executables   = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
-  s.test_files    = s.files.grep(%r{^(test|spec|features)/})
   s.require_paths = ["lib"]
 
   s.post_install_message = %q{
@@ -56,4 +55,5 @@ Gem::Specification.new do |s|
 
   # quiet "Gem.gunzip is deprecated" deprecation warning caused by rubocop
   s.add_development_dependency "unicode-display_width", "~> 1.3"
+  s.metadata["rubygems_mfa_required"] = "true"
 end

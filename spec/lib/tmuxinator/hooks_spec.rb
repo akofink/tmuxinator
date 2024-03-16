@@ -18,7 +18,7 @@ describe Tmuxinator::Hooks do
       before do
         project.yaml[hook_name] = [
           "echo 'on hook'",
-          "echo 'another command here'"
+          "echo 'another command here'",
         ]
       end
 

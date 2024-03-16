@@ -1,3 +1,5 @@
+inherit_from: .rubocop_todo.yml
+
 Layout/AccessModifierIndentation:
   Description: Check indentation of private/protected visibility modifiers.
   StyleGuide: https://github.com/bbatsov/ruby-style-guide#indent-public-private-protected
@@ -357,6 +359,10 @@ Style/SymbolProc:
   - respond_to
 Style/TrailingCommaInArguments:
   Enabled: true
+  EnforcedStyleForMultiline: comma
+Style/TrailingCommaInArrayLiteral:
+  Enabled: true
+  EnforcedStyleForMultiline: comma
 Style/TrivialAccessors:
   Description: Prefer attr_* methods to trivial readers/writers.
   StyleGuide: https://github.com/bbatsov/ruby-style-guide#attr_family

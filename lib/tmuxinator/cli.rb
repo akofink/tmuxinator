@@ -126,7 +126,7 @@ module Tmuxinator
             layout,
             Array(panes[window_name]).map do |_, pane_path|
               "cd #{pane_path}"
-            end
+            end,
           ]
         end
 
@@ -144,9 +144,7 @@ module Tmuxinator
         }
 
         path = config_path(name, options[:local])
-        File.open(path, "w") do |f|
-          f.write(YAML.dump(yaml))
-        end
+        File.write(path, YAML.dump(yaml))
       end
 
       def find_project_file(name, local = false)
@@ -170,7 +168,7 @@ module Tmuxinator
         template = Tmuxinator::Config.default? ? :default : :sample
         content = File.read(Tmuxinator::Config.send(template.to_sym))
         erb = Erubis::Eruby.new(content).result(binding)
-        File.open(path, "w") { |f| f.write(erb) }
+        File.write(path, erb)
         path
       end
 
@@ -194,7 +192,7 @@ module Tmuxinator
 
         begin
           Tmuxinator::Config.validate(options)
-        rescue => e
+        rescue StandardError => e
           exit! e.message
         end
       end
@@ -257,7 +255,7 @@ module Tmuxinator
       }
 
       show_version_warning if version_warning?(
-        options["suppress-tmux-version-warning"]
+        options["suppress-tmux-version-warning"],
       )
 
       project = create_project(params)
@@ -283,7 +281,7 @@ module Tmuxinator
         project_config: options["project-config"]
       }
       show_version_warning if version_warning?(
-        options["suppress-tmux-version-warning"]
+        options["suppress-tmux-version-warning"],
       )
 
       project = create_project(params)
@@ -297,7 +295,7 @@ module Tmuxinator
 
     def local
       show_version_warning if version_warning?(
-        options["suppress-tmux-version-warning"]
+        options["suppress-tmux-version-warning"],
       )
 
       render_project(create_project(attach: options[:attach]))

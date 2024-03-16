@@ -5,7 +5,7 @@ require "xdg"
 
 formatters = [
   SimpleCov::Formatter::HTMLFormatter,
-  Coveralls::SimpleCov::Formatter
+  Coveralls::SimpleCov::Formatter,
 ]
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(formatters)
 SimpleCov.start do
@@ -39,7 +39,7 @@ def capture_io
 
   yield
 
-  return captured_stdout.string, captured_stderr.string
+  [captured_stdout.string, captured_stderr.string]
 ensure
   $stdout = orig_stdout
   $stderr = orig_stderr

@@ -34,10 +34,7 @@ module Tmuxinator
     `on_project_exit`) and will be removed in a future release.
     M
 
-    attr_reader :yaml
-    attr_reader :force_attach
-    attr_reader :force_detach
-    attr_reader :custom_name
+    attr_reader :yaml, :force_attach, :force_detach, :custom_name
 
     def self.load(path, options = {})
       yaml = begin
@@ -49,8 +46,8 @@ module Tmuxinator
 
         content = Erubis::Eruby.new(raw_content).result(binding)
         YAML.safe_load(content, aliases: true)
-      rescue SyntaxError, StandardError => error
-        raise "Failed to parse config file: #{error.message}"
+      rescue SyntaxError, StandardError => e
+        raise "Failed to parse config file: #{e.message}"
       end
 
       new(yaml, options)
@@ -65,7 +62,7 @@ module Tmuxinator
         [parts[0], parts[1]]
       end
 
-      Hash[settings]
+      settings.to_h
     end
 
     def validate!
@@ -73,6 +70,7 @@ module Tmuxinator
         unless windows?
       raise "Your project file didn't specify a 'project_name'" \
         unless name?
+
       self
     end
 
@@ -135,8 +133,7 @@ module Tmuxinator
                     else
                       yaml["attach"]
                     end
-      attach = force_attach || !force_detach && yaml_attach
-      attach
+      force_attach || (!force_detach && yaml_attach)
     end
 
     def pre_window
@@ -239,7 +236,7 @@ module Tmuxinator
       !name.nil?
     end
 
-    def window(i)
+    def window(i) # rubocop:todo Naming/MethodParameterName
       "#{name}:#{i}"
     end
 
@@ -270,7 +267,7 @@ module Tmuxinator
         cli_args?,
         legacy_synchronize?,
         pre?,
-        post?
+        post?,
       ]
     end
 
@@ -281,7 +278,7 @@ module Tmuxinator
         CLIARGS_DEP_MSG,
         SYNC_DEP_MSG,
         PRE_DEP_MSG,
-        POST_DEP_MSG
+        POST_DEP_MSG,
       ]
     end
 
@@ -360,7 +357,7 @@ module Tmuxinator
       print_warning(
         "The specified pane title position " +
         "\"#{yaml['pane_title_position']}\" is not valid. " +
-        "Please choose one of: top, bottom, or off."
+        "Please choose one of: top, bottom, or off.",
       )
     end
 
@@ -368,7 +365,7 @@ module Tmuxinator
       print_warning(
         "You have enabled pane titles in your configuration, " +
         "but the feature is not supported by your version of tmux.\n" +
-        "Please consider upgrading to a version that supports it (tmux >=2.6)."
+        "Please consider upgrading to a version that supports it (tmux >=2.6).",
       )
     end
 

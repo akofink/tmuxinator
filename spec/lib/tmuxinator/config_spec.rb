@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe Tmuxinator::Config do
-  let(:fixtures_dir) { File.expand_path("../../../fixtures/", __FILE__) }
+  let(:fixtures_dir) { File.expand_path("../../fixtures", __dir__) }
   let(:xdg_config_dir) { "#{fixtures_dir}/xdg-tmuxinator" }
   let(:home_config_dir) { "#{fixtures_dir}/dot-tmuxinator" }
 
@@ -128,7 +128,7 @@ describe Tmuxinator::Config do
 
   describe "#home" do
     it "is ~/.tmuxinator" do
-      expect(described_class.home).to eq "#{ENV['HOME']}/.tmuxinator"
+      expect(described_class.home).to eq "#{ENV.fetch('HOME', nil)}/.tmuxinator"
     end
   end
 
@@ -155,30 +155,30 @@ describe Tmuxinator::Config do
 
     before do
       expect(Tmuxinator::Doctor).to receive(:installed?).and_return(true)
-      allow_any_instance_of(Kernel).to receive(:`).with(/tmux\s\-V/).
+      allow_any_instance_of(Kernel).to receive(:`).with(/tmux\s-V/).
         and_return("tmux #{version}")
     end
 
     version_mapping = {
-      "0.8"      => 0.8,
-      "1.0"      => 1.0,
-      "1.9"      => 1.9,
-      "1.9a"     => 1.9,
-      "2.4"      => 2.4,
-      "2.9a"     => 2.9,
-      "3.0-rc5"  => 3.0,
+      "0.8" => 0.8,
+      "1.0" => 1.0,
+      "1.9" => 1.9,
+      "1.9a" => 1.9,
+      "2.4" => 2.4,
+      "2.9a" => 2.9,
+      "3.0-rc5" => 3.0,
       "next-3.1" => 3.1,
-      "master"   => Float::INFINITY,
+      "master" => Float::INFINITY,
       # Failsafes
-      "foobar"   => 0.0,
-      "-123-"    => 123.0,
-      "5935"     => 5935.0,
-      ""         => 0.0,
-      "!@#^%"    => 0.0,
-      "2.9ä"     => 2.9,
-      "v3.5"     => 3.5,
-      "v3.12.0"  => 3.12,
-      "v3.12.5"  => 3.12
+      "foobar" => 0.0,
+      "-123-" => 123.0,
+      "5935" => 5935.0,
+      "" => 0.0,
+      "!@#^%" => 0.0,
+      "2.9ä" => 2.9,
+      "v3.5" => 3.5,
+      "v3.12.0" => 3.12,
+      "v3.12.5" => 3.12
     }.freeze
 
     version_mapping.each do |string_version, parsed_numeric_version|
@@ -460,7 +460,7 @@ describe Tmuxinator::Config do
         expect(described_class).to receive_messages(
           valid_project_config?: false,
           valid_local_project?: false,
-          valid_standard_project?: false
+          valid_standard_project?: false,
         )
         expect do
           described_class.validate

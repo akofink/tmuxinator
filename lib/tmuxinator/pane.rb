@@ -61,11 +61,11 @@ module Tmuxinator
 
     private
 
-    def _send_target(e)
+    def _send_target(e) # rubocop:todo Naming/MethodParameterName
       _send_keys(tmux_window_and_pane_target, e)
     end
 
-    def _send_keys(t, e)
+    def _send_keys(t, e) # rubocop:todo Naming/MethodParameterName
       "#{project.tmux} send-keys -t #{t} #{e} C-m"
     end
 

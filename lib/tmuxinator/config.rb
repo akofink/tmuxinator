@@ -12,13 +12,14 @@ module Tmuxinator
         return environment if environment?
         return xdg if xdg?
         return home if home?
+
         # No project directory specified or existent, default to XDG:
         FileUtils::mkdir_p(xdg)
         xdg
       end
 
       def home
-        ENV["HOME"] + "/.tmuxinator"
+        ENV.fetch("HOME", nil) + "/.tmuxinator"
       end
 
       def home?
@@ -38,8 +39,9 @@ module Tmuxinator
 
       # $TMUXINATOR_CONFIG (and create directory) or "".
       def environment
-        environment = ENV["TMUXINATOR_CONFIG"]
+        environment = ENV.fetch("TMUXINATOR_CONFIG", nil)
         return "" if environment.to_s.empty? # variable is unset (nil) or blank
+
         FileUtils::mkdir_p(environment) unless File.directory?(environment)
         environment
       end
@@ -79,6 +81,7 @@ module Tmuxinator
       def exist?(name: nil, path: nil)
         return File.exist?(path) if path
         return File.exist?(project(name)) if name
+
         false
       end
 
@@ -143,18 +146,21 @@ module Tmuxinator
         unless exist?(path: project_config)
           raise "Project config (#{project_config}) doesn't exist."
         end
+
         true
       end
 
       def valid_local_project?(name)
         return false if name
         raise NO_LOCAL_FILE_MSG unless local?
+
         true
       end
 
       def valid_standard_project?(name)
         return false unless name
         raise "Project #{name} doesn't exist." unless exist?(name: name)
+
         true
       end
 
@@ -193,6 +199,7 @@ module Tmuxinator
       # recursively searching 'directory'
       def project_in(directory, name)
         return nil if String(directory).empty?
+
         projects = Dir.glob("#{directory}/**/*.{yml,yaml}").sort
         projects.detect { |project| File.basename(project, ".*") == name }
       end
